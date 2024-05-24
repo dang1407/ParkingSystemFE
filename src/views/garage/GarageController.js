@@ -1,5 +1,4 @@
 import { useAxios } from "@/hooks/useAxios";
-import axios from "@/services/axios";
 import { useUserStore } from "@/stores/UserStore";
 class GarageController {
   constructor() {
