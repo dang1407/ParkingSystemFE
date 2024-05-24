@@ -1,0 +1,50 @@
+@import "./tailwind.scss";
+@import "./_mixins.scss";
+@import "./_variables.scss";
+@import "./_sidebar.scss";
+@import "./_topbar.scss";
+@import "./_responsive.scss";
+@import "./_content.scss";
+@import "./_main.scss";
+// @import "./_typography.scss";
+.layout-wrapper {
+  background-color: #e6e6e6;
+  font-weight: 500;
+}
+
+// Icon
+i.pi.pi-click-icon:hover {
+  color: rgb(var(--primary-500));
+  cursor: pointer;
+}
+
+.form-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 101;
+  background-color: rgba(0,0,0,0.3);
+}
+
+.form-close-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  &:hover {
+    @include focused-inset();
+  }
+}
+
+.calendar-container {
+  input[role="combobox"] {
+    width: 100%;
+  }
+}
