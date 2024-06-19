@@ -20,14 +20,18 @@
           @change="onChangeLanguage"
         ></Dropdown>
       </div>
-      <button
-        tabindex="0"
-        class="p-link layout-topbar-button"
-        v-tooltip.bottom="topBarTooltipLanguage.profile"
-      >
-        <i class="pi pi-user"></i>
-        <span>Profile</span>
-      </button>
+      <div>
+        <router-link
+          to="/infor"
+          tabindex="0"
+          class="p-link layout-topbar-button"
+          v-tooltip.bottom="topBarTooltipLanguage.profile"
+        >
+          <i class="pi pi-user"></i>
+          <span>Profile</span>
+        </router-link>
+      </div>
+
       <button
         tabindex="0"
         class="p-link layout-topbar-button"
@@ -46,6 +50,7 @@ import { useHelperStore } from "@/stores/HelperStore";
 import { useLayout } from "./composable/useLayout";
 import { usePrimeVue } from "primevue/config";
 import Dropdown from "primevue/dropdown";
+import Listbox from "primevue/listbox";
 import { locales } from "@/constants/locale";
 import { languageDictionary } from "@/constants/languages";
 const { onMenuToggle } = useLayout();

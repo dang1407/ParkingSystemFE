@@ -68,7 +68,7 @@ const tableInf = [
   },
 ];
 
-const departmentOptions = ref();
+const departmentOptions = ref([]);
 let departmentData = [];
 const titleOptions = ref([]);
 // Thông tin nhân viên sẽ gửi cho backend
@@ -232,7 +232,7 @@ async function getEmployeeAsync() {
   try {
     isGettingEmployeeData.value = true;
     const response = await request({
-      url: `Employees/${userStore.companyId}?page=${employeePaging.value.page}&pageSize=${employeePaging.value.pageSize}&searchProperty=${employeePaging.value.searchProperty}`,
+      url: `Employees?page=${employeePaging.value.page}&pageSize=${employeePaging.value.pageSize}&searchProperty=${employeePaging.value.searchProperty}`,
       method: "get",
     });
     isGettingEmployeeData.value = false;
@@ -289,7 +289,7 @@ async function createOneEmployeeAsync(toast, languageCode) {
     }
     const response = await request(
       {
-        url: `Employees/${userStore.companyId}`,
+        url: `Employees`,
         method: "post",
         data,
       },

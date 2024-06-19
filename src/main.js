@@ -17,8 +17,6 @@ import { createI18n } from "vue-i18n";
 //in main.js
 
 // Locale for Primevue
-import { useHelperStore } from "./stores/HelperStore";
-import { locales } from "@/constants/locale";
 const app = createApp(App);
 // use pinia
 app.use(createPinia());

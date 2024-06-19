@@ -1,90 +1,98 @@
+import { ref, computed } from "vue";
 import { useAxios } from "@/hooks/useAxios";
-import { useUserStore } from "@/stores/UserStore";
-class GarageController {
-  constructor() {
-    this.parkSlotsObject = {
-      A1: [],
-      A2: [],
-      A3: [],
-      B1: [],
-      B2: [],
-      B3: [],
-      C1: [],
-      C2: [],
-      C3: [],
-      C4: [],
-      D1: [],
-      D2: [],
-      D3: [],
-      D4: [],
-      E1: [],
-      E2: [],
-      E3: [],
-      F1: [],
-      F2: [],
-      G1: [],
-      G2: [],
-      H1: [],
-      H2: [],
-    };
-    this.floor = "B2";
-    this.userStore = useUserStore();
-  }
+const { request } = useAxios();
+const VehicleEnum = {
+  Bikecycle: 0,
+  Motorbike: 1,
+  Car: 2,
+};
+const VehicleSlotState = {
+  Bad: 0.9,
+  Good: 0.5,
+  VeryGood: 0,
+};
+const VehicleStateEnum = {
+  Bad: 1,
+  Good: 2,
+  VeryGood: 3,
+};
 
-  /**
-   * Hàm lấy thông tin trạng thái vị trí gửi xe theo tầng
-   * Created by: nkmdang 12/1/2024
-   */
-  async getParkSlotByFloorAsync() {
-    // this.notificationStore.showLoading();
-    const { request } = useAxios();
+const price = {
+  2: {
+    0: {
+      InDayBefore18: 2000,
+      InDayAfter18: 3000,
+      OutDay: 5000,
+    },
+    1: {
+      InDayBefore18: 3000,
+      InDayAfter18: 5000,
+      OutDay: 8000,
+    },
+    2: {
+      Hour: 5000,
+    },
+  },
+  1: {
+    0: {
+      InDayBefore18: 3000,
+      InDayAfter18: 4000,
+      OutDay: 8000,
+    },
+    1: {
+      InDayBefore18: 4000,
+      InDayAfter18: 6000,
+      OutDay: 10000,
+    },
+    2: {
+      Hour: 8000,
+    },
+  },
+};
+
+const parkingVehicleData = ref({});
+const parkingLotData = ref({});
+
+async function getParkingVehicleDataAsync(parkingId) {
+  try {
     const response = await request({
-      url: `ParkSlots?floor=${this.floor}`,
+      url: `ParkSlots/statistical/${parkingId}`,
       method: "get",
     });
-    let rawData = response.data;
-    // this.rawData = this.rawData.sort((a, b) => {
-    //   a.ParkSlotState > b.ParkSlotState;
-    // });
-    // console.log(this.rawData);
-    this.resetParkSlotsObject();
-    for (let i = 0; i < rawData.length; i++) {
-      if (rawData[i].ParkSlotCode) {
-        const parkSlotProccessCode =
-          rawData[i].ParkSlotCode[0] + rawData[i].ParkSlotCode[2];
-        // console.log(parkSlotProccessCode);
-        this.parkSlotsObject[parkSlotProccessCode].push(rawData[i]);
-      }
-    }
-  }
-
-  resetParkSlotsObject() {
-    this.parkSlotsObject = {
-      A1: [],
-      A2: [],
-      A3: [],
-      B1: [],
-      B2: [],
-      B3: [],
-      C1: [],
-      C2: [],
-      C3: [],
-      C4: [],
-      D1: [],
-      D2: [],
-      D3: [],
-      D4: [],
-      E1: [],
-      E2: [],
-      E3: [],
-      F1: [],
-      F2: [],
-      G1: [],
-      G2: [],
-      H1: [],
-      H2: [],
-    };
+    parkingVehicleData.value = response;
+  } catch (error) {
+    console.log(error);
   }
 }
 
-export default GarageController;
+async function getParkingLotDataAsync(parkingId) {
+  try {
+    const response = await request({
+      url: `Parkings/${parkingId}`,
+      method: "get",
+    });
+    parkingLotData.value = response[0];
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function getVehicleSlotState(stateValue) {
+  for (let key in VehicleSlotState) {
+    if (stateValue > VehicleSlotState[key]) {
+      return VehicleEnum[key];
+    }
+  }
+}
+
+export function GarageController() {
+  return {
+    parkingVehicleData,
+    parkingLotData,
+    GarageConstancesLanguage,
+    price,
+    getParkingVehicleDataAsync,
+    getParkingLotDataAsync,
+    getVehicleSlotState,
+  };
+}

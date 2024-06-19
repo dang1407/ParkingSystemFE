@@ -1,20 +1,26 @@
 <template>
-  <Dropdown :options="options">
-    <template #value="slotProps"> Excel </template>
-    <template #dropdownicon>
-      <i class="text-2xl pi pi-file-export pi-click-icon"></i>
-    </template>
-  </Dropdown>
+  <div class="card flex justify-center">
+    <MultiSelect
+      v-model="selectedCities"
+      :options="cities"
+      filter
+      optionLabel="name"
+      placeholder="Select Cities"
+      :maxSelectedLabels="3"
+      class="w-full md:w-[20rem]"
+    />
+  </div>
 </template>
 
 <script setup>
-import Calendar from "primevue/calendar";
-import Dropdown from "primevue/dropdown";
 import { ref } from "vue";
-const date = ref("2002-07-14T00:00:00");
-const options = ["Trang hiện tại", "Tất cả"];
-function onShowCalendarPicker() {
-  // alert("Show");
-  console.log("show");
-}
+
+const selectedCities = ref([{ name: "New York", code: "NY" }]);
+const cities = ref([
+  { name: "New York", code: "NY" },
+  { name: "Rome", code: "RM" },
+  { name: "London", code: "LDN" },
+  { name: "Istanbul", code: "IST" },
+  { name: "Paris", code: "PRS" },
+]);
 </script>

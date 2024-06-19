@@ -216,7 +216,7 @@ async function getParkMemberAsync() {
   try {
     isGettingParkMemberData.value = true;
     const response = await request({
-      url: `ParkMembers/${userStore.companyId}?page=${parkMemberPaging.value.page}&pageSize=${parkMemberPaging.value.pageSize}&searchProperty=${parkMemberPaging.value.searchProperty}`,
+      url: `ParkMembers?page=${parkMemberPaging.value.page}&pageSize=${parkMemberPaging.value.pageSize}&searchProperty=${parkMemberPaging.value.searchProperty}`,
       method: "get",
     });
     isGettingParkMemberData.value = false;
@@ -274,7 +274,7 @@ async function createOneParkMemberAsync(toast, languageCode) {
     }
     const response = await request(
       {
-        url: `ParkMembers/${userStore.companyId}`,
+        url: `ParkMembers`,
         method: "post",
         data,
       },
@@ -307,7 +307,7 @@ async function updateOneParkMemberAsync(toast, languageCode) {
     }
     const response = await request(
       {
-        url: `ParkMembers/${parkMemberFormData.value.ParkMemberId}/${userStore.companyId}`,
+        url: `ParkMembers/${parkMemberFormData.value.ParkMemberId}`,
         method: "put",
         data,
       },
@@ -578,7 +578,7 @@ async function exportExcelCurrentPage(aRef) {
   // this.parkMemberPropertyExcel = this.parkMemberProperty;
   try {
     const response = await request({
-      url: `ParkMembers/ParkMembersExcel/${userStore.companyId}?page=${parkMemberPaging.value.page}&pageSize=${parkMemberPaging.value.pageSize}&searchProperty=${parkMemberPaging.value.searchProperty}`,
+      url: `ParkMembers/ParkMembersExcel?page=${parkMemberPaging.value.page}&pageSize=${parkMemberPaging.value.pageSize}&searchProperty=${parkMemberPaging.value.searchProperty}`,
       method: "get",
       responseType: "blob",
     });

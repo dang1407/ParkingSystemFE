@@ -48,3 +48,8 @@ i.pi.pi-click-icon:hover {
     width: 100%;
   }
 }
+
+div[data-pc-section="content"] {
+  display: flex;
+  align-items: center;
+}

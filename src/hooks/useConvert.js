@@ -27,6 +27,28 @@ function convertDateDBToUIText(dateDB, datePattern) {
     return "";
   }
 }
+
+function convertDateDBToDDMMYYYHHMM(dateDB) {
+  if (dateDB && dateDB !== "") {
+    const datePattern = "dd/MM/yyyy hh:mm";
+    const year = dateDB.substring(0, 4);
+    const month = dateDB.substring(5, 7);
+    const date = dateDB.substring(8, 10);
+    const hour = dateDB.substring(11, 13);
+    const minute = dateDB.substring(14, 16);
+    let result = datePattern;
+    result = result.replace("dd", date);
+    result = result.replace("yyyy", year);
+    result = result.replace("MM", month);
+    result = result.replace("hh", hour);
+    result = result.replace("mm", minute);
+    // return `${date}/${month}/${year}`;
+    return result;
+  } else {
+    return "";
+  }
+}
+
 /**
  * Hàm chuyển đổi ngày tháng trên giao diện thành ngày tháng YYYY-MM-DD HH:mm:ss
  * để gửi sang backend
@@ -103,6 +125,7 @@ export function useConvert() {
     convertDateDBToUIText,
     convertDateUIToDateDB,
     convertDatePrimeCalendarToDateDB,
+    convertDateDBToDDMMYYYHHMM,
     getCurrentTimeString,
   };
 }

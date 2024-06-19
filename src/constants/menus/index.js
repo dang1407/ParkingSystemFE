@@ -1,11 +1,9 @@
 export const SIDEBAR_MENU_ITEMS = {
-  SIDEBAR_ROUTE: [
+  SIDEBAR_ROUTE_ADMIN: [
     {
-      label: "Home",
       items: [{ icon: "pi pi-fw pi-home", to: "/" }],
     },
     {
-      label: "Manage",
       items: [
         { icon: "pi pi-fw pi-users", to: "/employee" },
         {
@@ -23,7 +21,8 @@ export const SIDEBAR_MENU_ITEMS = {
       ],
     },
   ],
-  SIDEBAR_LABEL: {
+
+  SIDEBAR_LABEL_ADMIN: {
     vi: [
       {
         label: "Trang chủ",
@@ -68,6 +67,26 @@ export const SIDEBAR_MENU_ITEMS = {
             label: "Statistical",
           },
         ],
+      },
+    ],
+  },
+
+  SIDEBAR_ROUTE_PARKMEMBER: [
+    {
+      icon: "pi pi-fw pi-car",
+      to: "/garage",
+      items: [{}],
+    },
+  ],
+  SIDEBAR_LABEL_PARKMEMBER: {
+    vi: [
+      {
+        label: "Bãi đỗ xe",
+      },
+    ],
+    en: [
+      {
+        label: "Garage",
       },
     ],
   },

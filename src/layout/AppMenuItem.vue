@@ -1,10 +1,29 @@
 <template>
   <li class="layout-root-menuitem">
-    <div class="layout-menuitem-root-text" v-if="item.items">
+    <div
+      class="layout-menuitem-root-text"
+      v-if="item.items && !item.hasSubMenu"
+    >
       {{ item.label }}
     </div>
-    <!-- Nếu cần render ra subnav -->
-    <transition v-if="item.items">
+    <a
+      v-if="item.hasSubMenu"
+      class="flex justify-between"
+      @click="toggleSubMenu"
+    >
+      <span>
+        <i :class="item.icon" class="layout-menuitem-icon mr-2"></i>
+        <span>{{ item.label }}</span>
+      </span>
+      <i
+        class="pi"
+        :class="{
+          'pi-angle-down': !isOpenSubMenu,
+          'pi-angle-up': isOpenSubMenu,
+        }"
+      ></i>
+    </a>
+    <transition v-if="item.items && (!item.hasSubMenu || isOpenSubMenu)">
       <ul>
         <AppMenuItem
           v-for="(childItem, index) in item.items"
@@ -14,8 +33,11 @@
       </ul>
     </transition>
 
-    <!-- Không render ra subnav -->
-    <router-link v-if="!item.items" :to="item.to" tabindex="0">
+    <router-link
+      v-if="!item.items && !item.hasSubMenu"
+      :to="item.to"
+      tabindex="0"
+    >
       <i :class="item.icon" class="layout-menuitem-icon mr-2"></i>
       <span>{{ item.label }}</span>
     </router-link>
@@ -23,11 +45,26 @@
 </template>
 
 <script setup>
+import { ref, watch, onMounted } from "vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
 const props = defineProps({
   item: {
     type: Object,
     default: () => ({}),
   },
+});
+const isOpenSubMenu = ref(false);
+
+function toggleSubMenu() {
+  isOpenSubMenu.value = !isOpenSubMenu.value;
+}
+
+onMounted(() => {
+  if (route.params.parkingId) {
+    isOpenSubMenu.value = true;
+  }
 });
 </script>
 

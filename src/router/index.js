@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useUserStore } from "@/stores/UserStore";
+import { Role } from "./Role";
 // // Auth Guards
 const requireAuth = async (to, from, next) => {
   const userStore = useUserStore();
@@ -24,16 +25,35 @@ const routes = [
         component: () => import("@/views/dashboard/DashBoard.vue"),
       },
       {
+        name: "User Infor",
+        path: "/infor",
+        component: () => import("@/views/userinfo/UserInfor.vue"),
+      },
+      {
         name: "Employee Page",
         path: "/employee",
         component: () =>
           import(
             /* webPackChunkName: "employee" */ "@/views/employee/EmployeePage.vue"
           ),
+        beforeEnter: (to, from, next) => {
+          const userStore = useUserStore();
+          if (userStore.role != Role.Admin) {
+            next({ name: "Error", params: {} });
+          } else {
+            next();
+          }
+        },
       },
       {
         name: "Garage",
         path: "/garage",
+        component: () =>
+          import(/* webPackChunkName: "garage" */ "@/views/garage/Garage.vue"),
+      },
+      {
+        name: "Garage Infor",
+        path: "/garage/:parkingId",
         component: () =>
           import(/* webPackChunkName: "garage" */ "@/views/garage/Garage.vue"),
       },
@@ -44,6 +64,14 @@ const routes = [
           import(
             /* webPackChunkName: "parkmember" */ "@/views/parkmember/ParkMemberPage.vue"
           ),
+        beforeEnter: (to, from, next) => {
+          const userStore = useUserStore();
+          if (userStore.role != Role.Admin) {
+            next({ name: "Error", params: {} });
+          } else {
+            next();
+          }
+        },
       },
       {
         name: "Statistical",
@@ -52,6 +80,30 @@ const routes = [
           import(
             /* webPackChunkName: "statistical" */ "@/views/statistical/Statistical.vue"
           ),
+        beforeEnter: (to, from, next) => {
+          const userStore = useUserStore();
+          if (userStore.role != Role.Admin) {
+            next({ name: "Error", params: {} });
+          } else {
+            next();
+          }
+        },
+      },
+      {
+        name: "Vehicle",
+        path: "/vehicle",
+        component: () =>
+          import(
+            /* webPackChunkName: "statistical" */ "@/views/vehicleinout/Vehicle.vue"
+          ),
+        beforeEnter: (to, from, next) => {
+          const userStore = useUserStore();
+          if (userStore.role != Role.Admin) {
+            next({ name: "Error", params: {} });
+          } else {
+            next();
+          }
+        },
       },
     ],
     beforeEnter: (to, from, next) => {
@@ -79,6 +131,7 @@ const routes = [
       import(/* webPackChunkName: "login" */ "@/views/test/Test.vue"),
   },
   {
+    name: "Error",
     path: "/:pathMatch(.*)*",
     component: () =>
       import(/* webPackChunkName: "error" */ "@/views/error/ErrorPage.vue"),

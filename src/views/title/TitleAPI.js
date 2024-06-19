@@ -10,7 +10,7 @@ const userStore = useUserStore();
  */
 async function getTitleDataAsync() {
   const response = await request({
-    url: `Titles/${userStore.companyId}?page=1&pageSize=1000`,
+    url: `Titles?page=1&pageSize=1000`,
     method: "get",
   });
   return response;
