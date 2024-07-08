@@ -32,7 +32,9 @@
             </div>
 
             <div class="flex flex-col justify-center items-center">
-              <div class="-rotate-90 min-w-14 pl-1">Cột A1</div>
+              <div class="-rotate-90 min-w-16pl-1 mb-4">
+                {{ GarageConstancesLanguage.column }} A1
+              </div>
               <div class="column__icon mt-4"></div>
             </div>
 
@@ -78,7 +80,9 @@
             </div>
 
             <div class="flex flex-col justify-center items-center">
-              <div class="-rotate-90 min-w-14 pl-1">Cột A2</div>
+              <div class="-rotate-90 min-w-14 pl-1 mb-4">
+                {{ GarageConstancesLanguage.column }} A2
+              </div>
               <div class="column__icon mt-4"></div>
             </div>
 
@@ -126,7 +130,9 @@
             </div>
 
             <div class="flex flex-col justify-center items-center">
-              <div class="-rotate-90 min-w-14 pl-1">Cột B1</div>
+              <div class="-rotate-90 min-w-14 pl-1 mb-4">
+                {{ GarageConstancesLanguage.column }} B1
+              </div>
               <div class="column__icon mt-4"></div>
             </div>
 
@@ -172,7 +178,9 @@
             </div>
 
             <div class="flex flex-col justify-center items-center">
-              <div class="-rotate-90 min-w-14 pl-1">Cột B2</div>
+              <div class="-rotate-90 min-w-14 pl-1 mb-4">
+                {{ GarageConstancesLanguage.column }} B2
+              </div>
               <div class="column__icon mt-4"></div>
             </div>
             <div class="">
@@ -219,7 +227,9 @@
             </div>
 
             <div class="flex flex-col justify-center items-center">
-              <div class="-rotate-90 min-w-14 pl-1">Cột C1</div>
+              <div class="-rotate-90 min-w-14 pl-1 mb-4">
+                {{ GarageConstancesLanguage.column }} C1
+              </div>
               <div class="column__icon mt-4"></div>
             </div>
             <div class="">
@@ -264,7 +274,9 @@
             </div>
 
             <div class="flex flex-col justify-center items-center">
-              <div class="-rotate-90 min-w-14 pl-1">Cột C2</div>
+              <div class="-rotate-90 min-w-14 pl-1 mb-4">
+                {{ GarageConstancesLanguage.column }} C2
+              </div>
               <div class="column__icon mt-4"></div>
             </div>
             <div class="">

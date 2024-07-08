@@ -38,10 +38,13 @@ export const parkMemberConstants = {
       chooseImage: "Chọn hình ảnh",
       ChooseDepartmentBefore: "Vui lòng chọn đơn vị trước",
       LicensePlate: "Biển số xe",
+      Vehicle: "Loại xe",
     },
     formError: {
       FullNameMaxLengthAndRequire: "Họ và tên là bắt buộc.",
       FullNameLength: "Họ và tên không vượt quá 255 kí tự.",
+      UserNameMaxLengthAndRequire: "Tài khoản là bắt buộc.",
+      UserNameLength: "Tài khoản không vượt quá 255 kí tự.",
       AddressLength: "Địa chỉ không vượt quá 255 kí tự.",
       PositionNameLength: "Chức danh không vượt quá 255 kí tự.",
       BankNameLength: "Tên ngân hàng không vượt quá 255 kí tự.",
@@ -133,6 +136,7 @@ export const parkMemberConstants = {
       chooseImage: "Choose an image",
       ChooseDepartmentBefore: "Please select one department",
       LicensePlate: "LicensePlate",
+      Vehicle: "Vehicle",
     },
     formError: {
       FullNameMaxLengthAndRequire: "Full name is required.",

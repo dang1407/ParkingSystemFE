@@ -185,6 +185,7 @@ function showEmployeeFormConfirmDialog(confirm, toast, showDuplicateForm) {
     accept: async () => {
       // Tạo mới một nhân viên
       if (formMode.value === formModeEnum.Create) {
+        console.log("create employee");
         await createOneEmployeeAsync(toast, helperStore.languageCode);
       } else if (formMode.value === formModeEnum.Update) {
         await updateOneEmployeeAsync(toast, helperStore.languageCode);
@@ -267,6 +268,7 @@ async function createOneEmployeeAsync(toast, languageCode) {
       return;
     }
     if (employeeFormData.value.AvatarFile) {
+      console.log("has file");
       const imageNameSplit = employeeFormData.value.AvatarFile.name.split(".");
       const extension = imageNameSplit.pop();
       const name = imageNameSplit.join(".");
@@ -278,27 +280,44 @@ async function createOneEmployeeAsync(toast, languageCode) {
       uploadBytes(imageStorageRef, data.AvatarFile)
         .then((snapshot) => {
           console.log("Uploaded a blob or file!", snapshot);
-          getDownloadURL(snapshot.ref).then((downloadURL) => {
+          getDownloadURL(snapshot.ref).then(async (downloadURL) => {
             console.log(downloadURL);
             data.AvatarLink = downloadURL;
+            const response = await request(
+              {
+                url: `Employees`,
+                method: "post",
+                data,
+              },
+              toast
+            );
+            await getEmployeeAsync();
+            const toastContent = employeeConstantsLanguage.value.Toast;
+            toast.add(
+              toastContent.ActionEmployeeSuccess(toastContent[formMode.value])
+            );
+            formError.value = {};
           });
         })
         .catch((error) => {
           console.log(error);
         });
+    } else {
+      const response = await request(
+        {
+          url: `Employees`,
+          method: "post",
+          data,
+        },
+        toast
+      );
+      await getEmployeeAsync();
+      const toastContent = employeeConstantsLanguage.value.Toast;
+      toast.add(
+        toastContent.ActionEmployeeSuccess(toastContent[formMode.value])
+      );
+      formError.value = {};
     }
-    const response = await request(
-      {
-        url: `Employees`,
-        method: "post",
-        data,
-      },
-      toast
-    );
-    await getEmployeeAsync();
-    const toastContent = employeeConstantsLanguage.value.Toast;
-    toast.add(toastContent.ActionEmployeeSuccess(toastContent[formMode.value]));
-    formError.value = {};
   } catch (error) {
     console.log(error);
     if (error.response?.status === 400) {
@@ -318,19 +337,60 @@ async function updateOneEmployeeAsync(toast, languageCode) {
     if (!validateEmployeeFormData(data)) {
       return;
     }
-    const response = await request(
-      {
-        url: `Employees/${employeeFormData.value.EmployeeId}`,
-        method: "put",
-        data,
-      },
-      toast
-    );
-    await getEmployeeAsync();
-    const toastContent = employeeConstantsLanguage.value.Toast;
-    toast.add(toastContent.ActionEmployeeSuccess(toastContent[formMode.value]));
-    // Sau khi người dùng sửa lỗi và gọi API thành công thì bỏ lỗi của form
-    formError.value = {};
+
+    if (employeeFormData.value.AvatarFile) {
+      console.log("has file");
+      const imageNameSplit = employeeFormData.value.AvatarFile.name.split(".");
+      const extension = imageNameSplit.pop();
+      const name = imageNameSplit.join(".");
+      const imageStorageRef = firebaseRef(
+        storage,
+        `images/${name + new Date().getTime() + "." + extension}`
+      );
+
+      uploadBytes(imageStorageRef, data.AvatarFile)
+        .then((snapshot) => {
+          console.log("Uploaded a blob or file!", snapshot);
+          getDownloadURL(snapshot.ref).then(async (downloadURL) => {
+            console.log(downloadURL);
+            data.AvatarLink = downloadURL;
+            const response = await request(
+              {
+                url: `Employees/${employeeFormData.value.EmployeeId}`,
+                method: "put",
+                data,
+              },
+              toast
+            );
+            await getEmployeeAsync();
+            const toastContent = employeeConstantsLanguage.value.Toast;
+            toast.add(
+              toastContent.ActionEmployeeSuccess(toastContent[formMode.value])
+            );
+            // Sau khi người dùng sửa lỗi và gọi API thành công thì bỏ lỗi của form
+            formError.value = {};
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      const response = await request(
+        {
+          url: `Employees/${employeeFormData.value.EmployeeId}`,
+          method: "put",
+          data,
+        },
+        toast
+      );
+      await getEmployeeAsync();
+      const toastContent = employeeConstantsLanguage.value.Toast;
+      toast.add(
+        toastContent.ActionEmployeeSuccess(toastContent[formMode.value])
+      );
+      // Sau khi người dùng sửa lỗi và gọi API thành công thì bỏ lỗi của form
+      formError.value = {};
+    }
   } catch (error) {
     console.log(error);
   }
@@ -625,14 +685,23 @@ async function getNewEmployeeCode() {
  *
  * Created By: nkmdang 10/10/2023
  */
-async function exportExcelCurrentPage(aRef) {
+async function exportExcelCurrentPage(aRef, mode) {
   // this.employeePropertyExcel = this.employeeProperty;
   try {
-    const response = await request({
-      url: `Employees/EmployeesExcel/${userStore.companyId}?page=${employeePaging.value.page}&pageSize=${employeePaging.value.pageSize}&searchProperty=${employeePaging.value.searchProperty}`,
-      method: "get",
-      responseType: "blob",
-    });
+    let response;
+    if (mode == 0) {
+      response = await request({
+        url: `Employees/EmployeesExcel?page=${employeePaging.value.page}&pageSize=${employeePaging.value.pageSize}&searchProperty=${employeePaging.value.searchProperty}`,
+        method: "get",
+        responseType: "blob",
+      });
+    } else if (mode == 1) {
+      response = await request({
+        url: `Employees/EmployeesExcel?page=1&pageSize=100000`,
+        method: "get",
+        responseType: "blob",
+      });
+    }
     // const response = await axios.get(
     //   `Employees/EmployeesExcel?page=${page}&pageSize=${pageSize}`,
     //   {
@@ -717,6 +786,7 @@ export function EmployeeService() {
     paginatorPending,
     formError,
     exportExcelOptions,
+    validateEmployeeFormData,
     showEmployeeForm,
     showEmployeeFormConfirmDialog,
     hideEmployeeForm,

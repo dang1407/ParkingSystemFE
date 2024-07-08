@@ -19,8 +19,12 @@ export const GarageConstances = {
     formTitle: "Thông tin vị trí để xe",
     missingFieldRequired: "Bạn chưa nhập trường bắt buộc",
     formError: {
+      FieldNotValid: "Lỗi nhập liệu",
       MissingLicensePlate: "Bạn chưa điền thông tin biển số xe",
-      LicensePlateNotMatch: "Biển số xe không khớp với biển đã đăng ký!",
+      LicensePlateInNotMatch: "Biển số xe không khớp với biển đã đăng ký!",
+      LicensePlateOutNotMatch: "Biển số xe ra không khớp với biển số xe vào!",
+      LicensePlateNotValid:
+        "Biển số xe không đúng định dạng. Vui lòng kiểm tra lại.",
     },
     formLabel: {
       enterVehilceToGarage: "Đưa xe vào bãi",
@@ -66,6 +70,12 @@ export const GarageConstances = {
         detail: "Lấy xe ra khỏi bãi thành công",
         life: 10000,
       },
+      UpdatePreOrderSuccess: {
+        summary: "Thành công",
+        severity: "success",
+        detail: "Sửa thông tin đặt trước vị trí đỗ xe thành công",
+        life: 10000,
+      },
     },
   },
   en: {
@@ -80,7 +90,7 @@ export const GarageConstances = {
     exportBillButtonLabel: "Export invoice",
     infor: "Vehicle information available in the parking lot",
     column: "Column",
-    mapTitle: "Parking lot map",
+    mapTitle: "Parking Lot Map",
     intervalCallTitle: (time) =>
       `Parking information is updated every ${time} seconds`,
     emptyParkingLot: "You haven't added any parking lots yet!",
@@ -89,10 +99,15 @@ export const GarageConstances = {
     state: "State",
     formTitle: "Park slot information",
     formError: {
+      FieldNotValid: "Input error",
       MissingLicensePlate:
         "You have not filled in the license plate information",
-      LicensePlateNotMatch:
+      LicensePlateInNotMatch:
         "The license plate number does not match the registered license plate!",
+      LicensePlateOutNotMatch:
+        "The outgoing license plate does not match the incoming license plate!",
+      LicensePlateNotValid:
+        "The license plate is not in the correct format. Please check again.",
     },
     formLabel: {
       enterVehilceToGarage: "Enter vehicle to parking lot",
@@ -130,6 +145,18 @@ export const GarageConstances = {
         summary: "Success",
         severity: "success",
         detail: "Successfully added vehicle to the parking lot",
+        life: 10000,
+      },
+      EnterVehicleOutGarageSuccess: {
+        summary: "Success",
+        severity: "success",
+        detail: "Successfully enter out the car from the parking lot",
+        life: 10000,
+      },
+      UpdatePreOrderSuccess: {
+        summary: "Success",
+        severity: "success",
+        detail: "Successfully edited parking location reservation information",
         life: 10000,
       },
     },

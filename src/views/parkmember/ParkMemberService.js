@@ -51,7 +51,7 @@ const tableInf = [
     tdStyle: "w-[200px] sm:min-w-56",
   },
 ];
-
+const VNLicensePlateRegex = /^([0-9]{2}|[0-9]{2}[A-Z])([0-9]{4,5})$/;
 const departmentOptions = ref();
 let departmentData = [];
 const titleOptions = ref([]);
@@ -666,6 +666,7 @@ export function ParkMemberService() {
     paginatorPending,
     formError,
     exportExcelOptions,
+    VNLicensePlateRegex,
     showParkMemberForm,
     showParkMemberFormConfirmDialog,
     hideParkMemberForm,

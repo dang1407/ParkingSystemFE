@@ -83,11 +83,11 @@ export const useUserStore = defineStore("userStore", {
       localStorage.setItem("accessToken", undefined);
       this.isLogined = false;
       this.accessToken = undefined;
-      const router = useRouter();
-      router.push({
-        name: "Login",
-        params: {},
-      });
+      // const router = useRouter();
+      // router.push({
+      //   name: "Login",
+      //   params: {},
+      // });
     },
   },
 });

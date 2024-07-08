@@ -18,6 +18,16 @@
         v-model="helperStore.language"
       ></Dropdown>
     </div>
+    <div class="w-full">
+      <div class="my-[0.75rem]">
+        {{ SIDEBAR_CONSTANCES_LANGUAGE.feature }}
+      </div>
+      <Button
+        :label="SIDEBAR_CONSTANCES_LANGUAGE.signOut"
+        class="w-full !rounded-2xl"
+        @click="signOut"
+      ></Button>
+    </div>
   </ul>
 </template>
 
@@ -33,16 +43,28 @@ import { languageDictionary } from "@/constants/languages";
 import { useAxios } from "@/hooks/useAxios";
 const { request } = useAxios();
 import { method } from "lodash-es";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useUserStore } from "@/stores/UserStore";
 const helperStore = useHelperStore();
 const isShowSideBar = ref(false);
 const userStore = useUserStore();
 const route = useRoute();
-/** Hàm computed có reactive với sự thay đổi của language nhưng UI ko rerender
- *  nên cầm thêm isRerenderSideBar
- */
-// const isRerenderSidebar = ref(false);
+const router = useRouter();
+const SIDEBAR_CONSTANCES = {
+  vi: {
+    signOut: "Đăng xuất",
+    feature: "Chức năng",
+  },
+  en: {
+    signOut: "Sign out",
+    feature: "Feature",
+  },
+};
+
+const SIDEBAR_CONSTANCES_LANGUAGE = computed(() => {
+  return SIDEBAR_CONSTANCES[helperStore.languageCode];
+});
+
 const {
   SIDEBAR_ROUTE_ADMIN,
   SIDEBAR_LABEL_ADMIN,
@@ -72,7 +94,10 @@ async function getParkingDataAsync() {
       if (userStore.role == "admin") {
         SIDEBAR_ROUTE_ADMIN[1].items[1].items = parkingMenuData;
         // SIDEBAR_ROUTE_ADMIN[1].items[1].items = parkingMenuData;
-      } else if (userStore.role == "parkmember") {
+      } else if (
+        userStore.role == "parkmember" ||
+        userStore.role == "employee"
+      ) {
         SIDEBAR_ROUTE_PARKMEMBER[0].items.hasSubMenu = true;
         SIDEBAR_ROUTE_PARKMEMBER[0].items[0].items = parkingMenuData;
       }
@@ -89,10 +114,20 @@ const sidebar_label = ref({
 const sidebar_label_language = computed(() => {
   return sidebar_label.value[helperStore.languageCode];
 });
+
+/**
+ * Hàm đăng xuất tài khoản khỏi hệ thống
+ */
+function signOut() {
+  userStore.signOut();
+  // router.push({ name: "Login", params: {} });
+  router.push({ name: "Login", params: {} });
+}
+
 onMounted(async () => {
   await getParkingDataAsync();
 
-  if (userStore.role == "parkmember") {
+  if (userStore.role == "parkmember" || userStore.role == "employee") {
     sidebar_route.value = SIDEBAR_ROUTE_PARKMEMBER;
     sidebar_label.value = SIDEBAR_LABEL_PARKMEMBER;
     console.log(SIDEBAR_LABEL_PARKMEMBER);

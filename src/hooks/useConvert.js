@@ -13,6 +13,7 @@ function convertDateDBToUIText(dateDB, datePattern) {
   if (!datePattern) {
     datePattern = "dd/MM/yyyy";
   }
+  // console.log(dateDB);
   if (dateDB && dateDB !== "") {
     const year = dateDB.substring(0, 4);
     const month = dateDB.substring(5, 7);
@@ -119,6 +120,21 @@ function getCurrentTimeString() {
   return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
 }
 
+function processDateToSendDB(formData, key) {
+  try {
+    const value = formData[key].toString();
+    if (value) {
+      if (value.includes("GMT")) {
+        formData[key] = convertDatePrimeCalendarToDateDB(value);
+      } else if (value.includes("/")) {
+        formData[key] = convertDateUIToDateDB(value);
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export function useConvert() {
   return {
     convertGenderDBToUIText,
@@ -127,5 +143,6 @@ export function useConvert() {
     convertDatePrimeCalendarToDateDB,
     convertDateDBToDDMMYYYHHMM,
     getCurrentTimeString,
+    processDateToSendDB,
   };
 }

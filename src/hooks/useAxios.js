@@ -123,6 +123,7 @@ function request(axiosConfig, toast) {
   };
 
   const mergeService = merge(defaultConfig, axiosConfig);
+  // console.log(mergeService);
   const service = createService(toast);
   return service(mergeService);
 }

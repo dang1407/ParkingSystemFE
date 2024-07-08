@@ -1,5 +1,7 @@
 <template>
-  <div class="lg:min-w-[800px] md:min-w-[600px] xs:w-[90%]">
+  <div
+    class="lg:min-w-[800px] md:min-w-[600px] xs:max-w-[90%] xs:min-w-[300px]"
+  >
     <h1 class="font-bold text-2xl">{{ GarageConstancesLanguage.formTitle }}</h1>
     <div class="flex">
       <div
@@ -67,7 +69,7 @@
           </div>
           <div
             class="flex flex-col flex-1 gap-1"
-            v-if="parkSlotFormData.ParkSlotState != 0"
+            v-if="parkSlotFormData.ParkSlotState == 2"
           >
             <label class="font-bold">{{
               GarageConstancesLanguage.formLabel.VehicleInDateLabel
@@ -340,6 +342,12 @@ const licensePlateImageUrl = defineModel("licensePlateImageUrl");
 const priceUse = ref();
 const isUpdateCustomerLicensePlate = ref(false);
 const isShowOutGarageBill = ref(false);
+const VNLicensePlateRegex = /^([0-9]{2}|[0-9]{2}[A-Z]{1,2})([0-9]{4,5})$/;
+
+/**
+ * Hàm đặt trước vị trí bãi đỗ xe cho khách hàng
+ * @param parkSlotId Id của vị trí đỗ xe muốn đặt
+ */
 async function orderParkSlot(parkSlotId) {
   if (parkSlotFormData.Vehicle != 0 && !parkSlotFormData.value.LicensePlate) {
     console.log(GarageConstancesLanguage.value);
@@ -353,10 +361,27 @@ async function orderParkSlot(parkSlotId) {
     });
     return;
   }
+
   const formData = { ...parkSlotFormData.value };
   formData.ParkSlotState = 1;
   formData.VehicleInDate = getCurrentTimeString() + "Z";
-  console.log(parkSlotFormData.value);
+  // console.log(parkSlotFormData.value);
+  // Validate thông tin biển số xe nhập vào
+  if (!validateLicensePlateRegex(formData.LicensePlate)) {
+    formError.value.LicensePlate =
+      GarageConstancesLanguage.value.formError.LicensePlateNotValid;
+    confirm.require({
+      message: GarageConstancesLanguage.value.formError.LicensePlateNotValid,
+      header: GarageConstancesLanguage.value.formError.FieldNotValid,
+      icon: "pi pi-exclamation-triangle text-[48px] mr-2",
+      // rejectLabel: GarageConstancesLanguage.value.takePhotoAgain,
+      rejectClass: "invisible",
+      acceptLabel: GarageConstancesLanguage.value.accept,
+      accept: () => {},
+      reject: () => {},
+    });
+    return;
+  }
   try {
     const response = await request({
       url: `ParkSlots/${parkSlotId}`,
@@ -373,9 +398,16 @@ async function orderParkSlot(parkSlotId) {
   }
 }
 
-function showDialogLicensePlateNotValid() {
+function validateLicensePlateRegex(licensePlate) {
+  return VNLicensePlateRegex.test(licensePlate);
+}
+
+/**
+ * Hàm hiển thị thông báo biển số xe vào và biển đã đăng ký không khớp
+ */
+function showDialogLicensePlateInNotValid() {
   confirm.require({
-    message: GarageConstancesLanguage.value.formError.LicensePlateNotMatch,
+    message: GarageConstancesLanguage.value.formError.LicensePlateInNotMatch,
     header: "Confirmation",
     icon: "pi pi-exclamation-triangle text-[48px] mr-2",
     rejectProps: {
@@ -394,10 +426,30 @@ function showDialogLicensePlateNotValid() {
   });
 }
 
+function showDialogLicensePlateOutNotValid() {
+  confirm.require({
+    message: GarageConstancesLanguage.value.formError.LicensePlateOutNotMatch,
+    header: "Confirmation",
+    icon: "pi pi-exclamation-triangle text-[48px] mr-2",
+
+    // rejectLabel: GarageConstancesLanguage.value.takePhotoAgain,
+    acceptLabel: GarageConstancesLanguage.value.accept,
+    rejectClass: "invisible",
+    acceptClass:
+      "bg-red-500 dark:bg-red-400 border border-red-500 dark:border-red-400 focus:outline-none focus:outline-offset-0 focus:ring-1 hover:bg-red-600 dark:hover:bg-red-300 hover:border-red-600 dark:hover:border-red-300 focus:ring-red-500 dark:focus:ring-red-400",
+    accept: () => {
+      isUpdateCustomerLicensePlate.value = false;
+    },
+    // reject: () => {
+    //   isUpdateCustomerLicensePlate.value = false;
+    // },
+  });
+}
+
 async function enterVehicleToGarage(parkSlotId) {
   try {
     if (licensePlate.value != parkSlotFormData.value.LicensePlate) {
-      showDialogLicensePlateNotValid();
+      showDialogLicensePlateInNotValid();
       return;
     }
     const formData = { ...parkSlotFormData.value };
@@ -423,7 +475,7 @@ async function updateParkSlotOrder(parkSlotId) {
     const formData = { ...parkSlotFormData.value };
     formData.ParkSlotState = 1;
     console.log(parkSlotFormData.value);
-    formData.VehicleInDate = formData.VehicleInDate.replace("+07:00", "");
+    // formData.VehicleInDate = formData.VehicleInDate.replace("+07:00", "");
     console.log(formData.VehicleInDate);
     const response = await request({
       url: `ParkSlots/${parkSlotId}`,
@@ -432,7 +484,7 @@ async function updateParkSlotOrder(parkSlotId) {
     });
     emits("closeForm");
     emits("updateParkSlotSuccess");
-
+    toast.add(GarageConstancesLanguage.value?.toast?.UpdatePreOrderSuccess);
     console.log(response, parkSlotFormData.value);
   } catch (error) {
     console.log(error);
@@ -440,6 +492,10 @@ async function updateParkSlotOrder(parkSlotId) {
 }
 
 function showOutGarageBill() {
+  if (licensePlate.value != parkSlotFormData.value.LicensePlate) {
+    showDialogLicensePlateOutNotValid();
+    return;
+  }
   isShowOutGarageBill.value = true;
   const timeNow = getCurrentTimeString();
   const timeOut = new Date(timeNow);
@@ -514,8 +570,8 @@ function caculatePrice(dateString1, dateString2, vehicle, ticketType) {
   if (vehicle == 2) {
     const time = dateObject2.getTime() - dateObject1.getTime();
     const hours = Math.ceil(time / (60 * 60 * 1000));
+    console.log(hours);
     return price[ticketType][2].Hour * hours;
-    // console.log(hours);
   } else {
     if (date2 > date1) {
       return price[ticketType][vehicle].OutDay * (date2 - date1);

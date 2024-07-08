@@ -57,7 +57,12 @@
               </IconField>
             </div>
             <div @click="">
-              <Dropdown :options="exportExcelOptions" option-label="name">
+              <Dropdown
+                :options="exportExcelOptions"
+                @change="exportEmployeeExcel(excelSelectedOptions)"
+                v-model="excelSelectedOptions"
+                option-label="name"
+              >
                 <template #value="slotProps">
                   <div class="!text-[black]">Excel</div>
                 </template>
@@ -296,6 +301,15 @@ const excelListBoxPosition = ref({
 });
 // Các hàm covert thông tin từ DB sang chữ cho người dùng đọc
 const { convertGenderDBToUIText, convertDateDBToUIText } = useConvert();
+async function exportEmployeeExcel(option) {
+  if (option.value == 0) {
+    await exportExcelCurrentPage(aRef.value, 0);
+  } else {
+    await exportExcelCurrentPage(aRef.value, 1);
+  }
+}
+
+const excelSelectedOptions = ref();
 
 // Thông tin nhân viên lấy từ EmployeeService
 const {

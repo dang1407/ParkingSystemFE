@@ -57,7 +57,7 @@ const vehicleOptionsSelected = ref(vehicleOptions.value[3]);
 async function getParkingHistoryStatisticalAsync(year, vehicle) {
   try {
     let requestUrl = `ParkingHistory/statistical?year=${year}`;
-    if (vehicle) {
+    if (0 <= vehicle && vehicle <= 2) {
       requestUrl += `&vehicle=${vehicle}`;
     }
     const response = await request({

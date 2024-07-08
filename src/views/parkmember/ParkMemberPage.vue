@@ -222,6 +222,7 @@
           v-model:avatarFile="parkMemberFormData.AvatarFile"
           v-model:avatarLink="parkMemberFormData.AvatarLink"
           v-model:email="parkMemberFormData.Email"
+          v-model:licensePlate="parkMemberFormData.LicensePlate"
           :department-options="departmentOptions"
           v-model:formError="formError"
         ></ParkMemberFormBody>

@@ -12,7 +12,10 @@ import Dialog from "primevue/dialog";
 import ConfirmDialog from "primevue/confirmdialog";
 import { languageDictionary } from "./constants/languages";
 import { useHelperStore } from "./stores/HelperStore";
+import { useToast } from "primevue/usetoast";
+const toast = useToast();
 const helperStore = useHelperStore();
+helperStore.toast = toast;
 const confirmDialogPt = ref({
   rejectButton: {
     root: {},

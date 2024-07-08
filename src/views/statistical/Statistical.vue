@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-full rounded-2xl bg-white p-4">
+  <div class="w-full h-full rounded-2xl bg-white p-4 overflow-y-scroll">
     <h1 class="font-bold text-2xl">
       {{ StatisticalConstancesLanguage.title }}
     </h1>
@@ -277,6 +277,7 @@ async function applyFilterAndGetParkingHistoryDataAsync() {
         ""
       );
     }
+    console.log(vehicleOptionsSelected.value.value);
     const response = await getParkingHistoryStatisticalAsync(
       yearsSearch.value,
       vehicleOptionsSelected.value.value
@@ -301,7 +302,16 @@ async function applyFilterAndGetParkingHistoryDataAsync() {
         });
       });
     } else {
-      chartData.value.datasets[0].data = response.Prices;
+      chartData.value.datasets = [
+        {
+          label:
+            StatisticalConstancesLanguage.value.chartItemTitle + " " + yearNow,
+          data: response.Prices,
+          fill: false,
+          borderColor: chartLineColor[0],
+          tension: 0.4,
+        },
+      ];
     }
   } catch (error) {
     console.log(error);

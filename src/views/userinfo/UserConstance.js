@@ -19,6 +19,18 @@ export const UserInforConstance = {
       BankBranch: "Chi nhánh ngân hàng",
       chooseImage: "Chọn hình ảnh",
       ChooseDepartmentBefore: "Vui lòng chọn đơn vị trước",
+      Vehicle: "Loại xe",
+    },
+    updateInforButton: "Cập nhật thông tin cá nhân",
+    save: "Lưu",
+    cancelUpdate: "Hủy thay đổi",
+    toast: {
+      UpdateUserInforSuccess: {
+        summary: "Thành công",
+        detail: "Cập nhật thông tin cá nhân thành công",
+        severity: "success",
+        life: 5000,
+      },
     },
   },
   en: {
@@ -41,6 +53,18 @@ export const UserInforConstance = {
       BankBranch: "Bank Branch",
       chooseImage: "Choose an image",
       ChooseDepartmentBefore: "Please select one department",
+      Vehicle: "Vehicle",
+    },
+    updateInforButton: "Update personal information",
+    save: "Save",
+    cancelUpdate: "Cancel changes",
+    toast: {
+      UpdateUserInforSuccess: {
+        summary: "Success",
+        detail: "Personal information updated successfully",
+        severity: "success",
+        life: 5000,
+      },
     },
   },
 };

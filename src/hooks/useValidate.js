@@ -118,6 +118,68 @@ function validateWorkingAge(
   } else return "";
 }
 
+function validateFormData(data, formError, fieldValidate, constances) {
+  try {
+    let isError = false;
+    const errorObject = {};
+    formError.value = {};
+
+    for (let field in fieldValidate) {
+      for (let key in fieldValidate[field]) {
+        if (key == "maxLength") {
+          const errorMessageField = fieldValidate[field].require
+            ? "MaxLengthAndRequire"
+            : "Length";
+          errorObject[field] = validateCustomRequireAndMaxlength(
+            data[field],
+            constances.formError[field + errorMessageField],
+            fieldValidate[field].require
+          );
+        } else if (key == "regex") {
+          if (fieldValidate[field].require) {
+            errorObject[field] = validateByRegex(
+              data[field],
+              constances.formError[field + "InvalidFormat"],
+              fieldValidate[field].regex
+            );
+          } else if (data[field]) {
+            errorObject[field] = validateByRegex(
+              data[field],
+              constances.formError[field + "InvalidFormat"],
+              fieldValidate[field].regex
+            );
+          }
+        }
+      }
+    }
+    if (data.ConfirmPassword != data.Password) {
+      errorObject.Password =
+        constances.formError.PasswordNotMatchConfirmPassword;
+      isError = true;
+      // toast.add({});
+      // return;
+    }
+    console.log(errorObject);
+
+    // formError.value = errorObject;
+
+    for (let key in errorObject) {
+      // console.log(key);
+      if (errorObject[key]) {
+        formError.value = errorObject;
+        formError.value.isError = true;
+        isError = true;
+      }
+    }
+    formError.value.isError = isError;
+    console.log(formError);
+    return !isError;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
 export function useValidate() {
   return {
     validateCustomRequireAndMaxlength,
@@ -126,5 +188,6 @@ export function useValidate() {
     validateByRegex,
     validateEmail,
     validateWorkingAge,
+    validateFormData,
   };
 }
